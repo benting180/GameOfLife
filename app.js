@@ -25,6 +25,24 @@ randomButton.addEventListener("click", function() {
     setRandomGrid();
     updateTable();
 });
+function cellOnClick(event) {
+    try {
+        let td = event.target
+        let x = td.getAttribute('x');
+        let y = td.getAttribute('y');
+        console.log(y, x)
+        grid[y][x] = !grid[y][x]
+        updateTable();
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+let tableElement = document.getElementById("board");
+tableElement.addEventListener("click", cellOnClick);
+
+
+
 
 function setRandomGrid() {
     // set current grid into 1/0 by random
@@ -148,12 +166,14 @@ function drawTable() {
     const M = grid[0].length;
     var table = document.getElementById('board');
     
-    for (let j = 1; j <= N; j++) {
+    for (let j = 0; j < N; j++) {
         var tr = document.createElement('tr');
         var tdElements = []
-        for (let i = 1; i <= M; i++) {
+        for (let i = 0; i < M; i++) {
             var td = document.createElement('td');
             td.setAttribute('class', 'cell empty')
+            td.setAttribute('y', j)
+            td.setAttribute('x', i)
             tdElements.push(td);
             tr.appendChild(td);
         }
