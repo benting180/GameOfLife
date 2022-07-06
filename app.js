@@ -2,10 +2,10 @@
 let grid = createGrid();
 let htmlElements = [];
 let play = false;
+let speed = 50;
 
 let clearButton = document.querySelector(".clear-button");
 clearButton.addEventListener("click", function() {
-    console.log('clear')
     grid = createGrid();
     updateTable();
 });
@@ -30,11 +30,9 @@ function cellOnClick(event) {
         let td = event.target
         let x = td.getAttribute('x');
         let y = td.getAttribute('y');
-        console.log(y, x)
         grid[y][x] = !grid[y][x]
         updateTable();
     } catch (error) {
-        console.log(error)
     }
 }
 
@@ -62,7 +60,7 @@ function setRandomGrid() {
     grid = newGrid;
 }
 
-function createGrid(n=15, m=15) {
+function createGrid(n=30, m=30) {
     // return a array of array
     let rows = [];
     for (let j = 1; j <= n; j++) { // vertical
@@ -106,7 +104,7 @@ function nextState(currentState, c) {
     return currentState
 }
 
-function countSurroundLive(x, y, log) {
+function countSurroundLive(x, y) {
     let result = 0;
     const N = grid.length;
     const M = grid[0].length;
@@ -125,9 +123,6 @@ function countSurroundLive(x, y, log) {
             }
             if (grid[newY][newX] == true) {
                 result += 1;
-            }
-            if (log) {
-                console.log(newY, newX, grid[newY][newX])
             }
         }
     }
@@ -149,10 +144,6 @@ function nextGrid() {
             let newValue = nextState(currentState, surroundLive);
             if (newValue !== null) {
                 newGrid[j][i] = newValue;
-            }
-            if (j == 4 && i == 2) {
-                let surroundLive = countSurroundLive(i, j, true)
-                console.log('j: ', j, 'i:', i, 'live: ', surroundLive, 'new:',  newGrid[j][i])
             }
         }
     }
@@ -202,9 +193,21 @@ function newGeneration() {
         grid = nextGrid();
         updateTable()
     }
-
+    window.setTimeout(newGeneration, 130-speed);
 }
 
 drawTable()
 updateTable(grid);
-setInterval(newGeneration, 100)
+
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+  speed = this.value
+}
+
+newGeneration();
