@@ -20,6 +20,29 @@ playButton.addEventListener("click", function() {
     }
 });
 
+let randomButton = document.querySelector(".random-button");
+randomButton.addEventListener("click", function() {
+    setRandomGrid();
+    updateTable();
+});
+
+function setRandomGrid() {
+    // set current grid into 1/0 by random
+    let newGrid = createGrid()
+    const N = newGrid.length;
+    const M = newGrid[0].length;
+
+    for (let j = 0; j < N; j++) { // vertical
+        for (let i = 0; i < M; i++) { // horizontal
+            if (Math.random() > 0.5) {
+                newGrid[j][i] = true
+            } else {
+                newGrid[j][i] = false
+            }
+        }
+    }
+    grid = newGrid;
+}
 
 function createGrid(n=15, m=15) {
     // return a array of array
